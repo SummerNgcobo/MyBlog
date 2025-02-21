@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
       savedComments.forEach((comment, i) => addCommentToDOM(comment, i));
   }
 });
+
 document.addEventListener("DOMContentLoaded", function () {
   const categoryButtons = document.querySelectorAll(".category-btn");
   const posts = document.querySelectorAll(".post");
@@ -110,64 +111,41 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
-    document.querySelectorAll('.like-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            let icon = this.querySelector('i');
-            let count = this.querySelector('.like-count');
-            let currentLikes = parseInt(count.textContent);
-
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas', 'liked'); // Change to solid heart
-                count.textContent = currentLikes + 1;
-            } else {
-                icon.classList.remove('fas', 'liked');
-                icon.classList.add('far'); // Revert to outlined heart
-                count.textContent = currentLikes - 1;
-            }
-        });
+document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      let icon = this.querySelector('i');
+      let count = this.querySelector('.like-count');
+      let currentLikes = parseInt(count.textContent);
+  
+      if (icon.classList.contains('far')) {
+        icon.classList.remove('far');
+        icon.classList.add('fas', 'liked'); // Change to solid heart
+        count.textContent = currentLikes + 1;
+      } else {
+        icon.classList.remove('fas', 'liked');
+        icon.classList.add('far'); // Revert to outlined heart
+        count.textContent = currentLikes - 1;
+      }
+  
+      // Update local storage
+      let postId = this.closest('.post').getAttribute('data-category');
+      let storedLikes = localStorage.getItem(postId) ? JSON.parse(localStorage.getItem(postId)) : {};
+      storedLikes.likes = count.textContent;
+      localStorage.setItem(postId, JSON.stringify(storedLikes));
     });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const likeButton = document.querySelector(".like-btn");
-        const likeIcon = likeButton.querySelector("i");
-        const likeCount = likeButton.querySelector(".like-count");
-
-        // Load like state from local storage
-        let storedLikes = localStorage.getItem("likes") || 0;
-        let isLiked = localStorage.getItem("isLiked") === "true";
-
-        // Set the initial like state
-        likeCount.textContent = storedLikes;
-        if (isLiked) {
-            likeIcon.classList.remove("far");
-            likeIcon.classList.add("fas", "liked");
-        }
-
-        // Handle click event
-        likeButton.addEventListener("click", function () {
-            let currentLikes = parseInt(likeCount.textContent);
-
-            if (!isLiked) {
-                likeIcon.classList.remove("far");
-                likeIcon.classList.add("fas", "liked");
-                currentLikes += 1;
-                isLiked = true;
-            } else {
-                likeIcon.classList.remove("fas", "liked");
-                likeIcon.classList.add("far");
-                currentLikes -= 1;
-                isLiked = false;
-            }
-
-            // Update count and save to local storage
-            likeCount.textContent = currentLikes;
-            localStorage.setItem("likes", currentLikes);
-            localStorage.setItem("isLiked", isLiked);
-        });
-    });
-
-
-
-
+  });
+  
+  // Load likes from local storage
+  document.querySelectorAll('.post').forEach(post => {
+    let postId = post.getAttribute('data-category');
+    let storedLikes = localStorage.getItem(postId) ? JSON.parse(localStorage.getItem(postId)) : {};
+    let likeButton = post.querySelector('.like-btn');
+    let likeCount = likeButton.querySelector('.like-count');
+    likeCount.textContent = storedLikes.likes || 0;
+    let icon = likeButton.querySelector('i');
+    if (storedLikes.likes && storedLikes.likes > 0) {
+      icon.classList.remove('far');
+      icon.classList.add('fas', 'liked');
+    }
+  });
+  
