@@ -12,16 +12,6 @@
     <!-- custom css file link  -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-D29BYWM592"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-D29BYWM592');
-</script>
-
 </head>
 <body>
 
@@ -72,7 +62,7 @@
 
     <div class="posts-container">
 
-        <div class="post">
+        <div class="post" data-category="food">
             <img src="images/blog-1.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -108,14 +98,21 @@
                 
                 Bon appétit! </p>
             <!-- <p class="text"></p> -->
+             <!-- Like button -->
              <button class="like-btn">
-        <i class="far fa-heart"></i> <span class="like-count">0</span>
-    </button>
+                <i class="far fa-heart"></i> <span class="like-count">0</span>
+            </button>
+
+    
+
             <div class="links">
                 <a href="#" class="user">
                     <i class="far fa-user"></i>
                     <span>by summer</span>
                 </a>
+
+               
+ 
                 <div class="comment-section">
                     <h3>Leave a Comment</h3>
                     <form id="commentForm">
@@ -127,14 +124,14 @@
                         <!-- Comments will appear here -->
                     </div>
                 </div>
-                <!-- <a href="#" class="icon">
+                 <!-- <a href="#" class="icon">
                     <i class="far fa-share-square"></i>
-                    <span>(29)</span>
+                    <!-- <span></span> -->
                 </a> -->
             </div>
         </div>
 
-        <div class="post">
+        <div class="post" data-category="public">
             <img src="images/blog-2.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -169,14 +166,19 @@
                 
                 As I navigate this city, I carry with me a heightened awareness of these disparities and a commitment to advocate for a more equitable Johannesburg.</p>
             <!-- <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reiciendis fugiat quas nemo quia omnis repellat obcaecati quaerat voluptates fuga error dicta cupiditate pariatur soluta dolorum quis eum quibusdam quam?</p> -->
-            <button class="like-btn">
-        <i class="far fa-heart"></i> <span class="like-count">0</span>
-    </button>
+               <!-- Like button -->
+               <button class="like-btn">
+                <i class="far fa-heart"></i> <span class="like-count">0</span>
+            </button>
+
             <div class="links">
                 <a href="#" class="user">
                     <i class="far fa-user"></i>
                     <span>by summer</span>
                 </a>
+
+                
+
                 <div class="comment-section">
                     <h3>Leave a Comment</h3>
                     <form id="commentForm">
@@ -195,7 +197,7 @@
             </div>
         </div>
 
-        <div class="post">
+        <div class="post" data-category="20s">
             <img src="images/blog-3.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -231,9 +233,11 @@
                 And hey, if I ever get the urge to hear the words “I love you” before bed, I’ll just do what I always do—text my best friend.
                 
                 </p>
-            <button class="like-btn">
+
+              <!-- Like button -->
+    <button class="like-btn">
         <i class="far fa-heart"></i> <span class="like-count">0</span>
-    </button>
+    </button>    
           
             <div class="links">
                 <a href="#" class="user">
@@ -281,16 +285,15 @@
         <div class="box">
             <h3 class="title">categories</h3>
             <div class="category">
-                <a href="#"> travel <span>42</span></a>
-                <a href="#"> photography <span>75</span> </a>
-                <a href="#"> technology <span>22</span> </a>
-                <a href="#"> fashion <span>17</span> </a>
-                <a href="#"> study <span>48</span> </a>
-                <a href="#"> science <span>39</span> </a>
-                <a href="#"> music <span>59</span> </a>
-                <a href="#"> public <span>12</span> </a>
-                <a href="#"> business <span>32</span> </a>
-                <a href="#"> sports <span>18</span> </a>
+                <a href="#" data-category="travel"> travel </a>
+                <a href="#" data-category="photography"> photography  </a>
+                <a href="#" data-category="technology"> technology </a>
+                <a href="#" data-category="study"> study  </a>
+                <a href="#" data-category="science"> science  </a>
+                <a href="#" data-category="music"> music  </a>
+                <a href="#" data-category="public"> public </a>
+                <a href="#" data-category="food"> food  </a>
+                <a href="#" data-category="20s"> 20s </a>
             </div>
         </div>
 
@@ -377,26 +380,6 @@
 
 <!-- footer section ends -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script type="module">
     // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -424,7 +407,7 @@ const analytics = getAnalytics(app);
 
 
 
-<!-- custom js file link  -->
+
 <script src="js/script.js"></script>
     
 </body>

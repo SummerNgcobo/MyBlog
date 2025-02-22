@@ -30,8 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const commentsContainer = document.getElementById("commentsContainer");
 
   // Load stored comments
-  let savedComments = JSON.parse(localStorage.getItem("comments")) || [];
-  savedComments.forEach((comment, index) => addCommentToDOM(comment, index));
+  fetch('/comments')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach((comment, index) => addCommentToDOM(comment, index));
+    });
 
   commentForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -43,12 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
       if (username && commentText) {
           const commentData = { username, commentText, date: new Date().toLocaleString() };
 
-          // Save to local storage
-          savedComments.push(commentData);
-          localStorage.setItem("comments", JSON.stringify(savedComments));
-
-          // Add comment to DOM
-          addCommentToDOM(commentData, savedComments.length - 1);
+          // Post comment to server
+          fetch('/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(commentData),
+          })
+            .then(response => response.json())
+            .then(data => {
+              addCommentToDOM(data, data.length - 1);
+            });
 
           // Clear input fields
           commentForm.reset();
@@ -78,15 +85,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function deleteComment(index) {
-      // Remove comment from array
-      savedComments.splice(index, 1);
-
-      // Update local storage
-      localStorage.setItem("comments", JSON.stringify(savedComments));
-
-      // Re-render comments
-      commentsContainer.innerHTML = "";
-      savedComments.forEach((comment, i) => addCommentToDOM(comment, i));
+      // Delete comment from server
+      fetch(`/comments/${index}`, {
+        method: 'DELETE',
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Re-render comments
+          commentsContainer.innerHTML = "";
+          data.forEach((comment, i) => addCommentToDOM(comment, i));
+        });
   }
 });
 
@@ -115,37 +123,37 @@ document.querySelectorAll('.like-btn').forEach(button => {
     button.addEventListener('click', function() {
       let icon = this.querySelector('i');
       let count = this.querySelector('.like-count');
-      let currentLikes = parseInt(count.textContent);
-  
+      let postId = this.closest('.post').getAttribute('data-category');
+
       if (icon.classList.contains('far')) {
         icon.classList.remove('far');
         icon.classList.add('fas', 'liked'); // Change to solid heart
-        count.textContent = currentLikes + 1;
+        count.textContent = parseInt(count.textContent) + 1;
+
+        // Post like to server
+        fetch('/likes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ postId: postId }),
+        });
       } else {
         icon.classList.remove('fas', 'liked');
         icon.classList.add('far'); // Revert to outlined heart
-        count.textContent = currentLikes - 1;
+        count.textContent = parseInt(count.textContent) - 1;
+
+        // Delete like from server
+        fetch(`/likes/${postId}`, {
+          method: 'DELETE',
+        });
       }
-  
-      // Update local storage
-      let postId = this.closest('.post').getAttribute('data-category');
-      let storedLikes = localStorage.getItem(postId) ? JSON.parse(localStorage.getItem(postId)) : {};
-      storedLikes.likes = count.textContent;
-      localStorage.setItem(postId, JSON.stringify(storedLikes));
     });
+});
+
+// Get likes
+fetch('/likes')
+  .then(response => response.json())
+  .then(data => {
+    // Display likes
+    const likesElement = document.getElementById('likes');
+    likesElement.textContent = `Likes: ${data.length}`;
   });
-  
-  // Load likes from local storage
-  document.querySelectorAll('.post').forEach(post => {
-    let postId = post.getAttribute('data-category');
-    let storedLikes = localStorage.getItem(postId) ? JSON.parse(localStorage.getItem(postId)) : {};
-    let likeButton = post.querySelector('.like-btn');
-    let likeCount = likeButton.querySelector('.like-count');
-    likeCount.textContent = storedLikes.likes || 0;
-    let icon = likeButton.querySelector('i');
-    if (storedLikes.likes && storedLikes.likes > 0) {
-      icon.classList.remove('far');
-      icon.classList.add('fas', 'liked');
-    }
-  });
-  
