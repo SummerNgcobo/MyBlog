@@ -25,92 +25,95 @@ window.onscroll = () =>{
   searchForm.classList.remove('active');
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  const commentForm = document.getElementById("commentForm");
-  const commentsContainer = document.getElementById("commentsContainer");
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: 'AIzaSyAogXmBAn_3TxQNQSx0REVOwx9osQfXdrM',
+  authDomain: 'summer-s-blog-368c9.firebaseapp.com',
+  projectId: 'summer-s-blog-368c9',
+};
 
-  commentForm.addEventListener("submit", function (event) {
-      event.preventDefault();
+firebase.initializeApp(firebaseConfig);
 
-      const username = document.getElementById("username").value;
-      const commentText = document.getElementById("commentText").value;
+const db = firebase.firestore();
 
-      if (username && commentText) {
-          const commentData = { username, commentText, date: new Date().toLocaleString() };
+// Get references to the form and comments container
+const commentForm = document.getElementById('commentForm');
+const commentsContainer = document.getElementById('commentsContainer');
 
-          addCommentToDOM(commentData);
+// Add event listener to the form
+commentForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-          commentForm.reset();
-      }
-  });
+  const username = document.getElementById('username').value;
+  const commentText = document.getElementById('commentText').value;
 
-  function addCommentToDOM(comment) {
-      const commentDiv = document.createElement("div");
-      commentDiv.classList.add("comment");
-
-      commentDiv.innerHTML = `
-          <div class="comment-header">
-              <strong>${comment.username}</strong> 
-              <span class="date">${comment.date}</span>
-              <button class="delete-btn" aria-label="Delete Comment">
-                  🗑️
-              </button>
-          </div>
-          <p>${comment.commentText}</p>
-      `;
-      commentsContainer.prepend(commentDiv); 
-
-      commentDiv.querySelector(".delete-btn").addEventListener("click", function () {
-          commentsContainer.removeChild(commentDiv);
-      });
+  if (username && commentText) {
+    // Add comment to Firestore
+    db.collection('comments').add({
+      username,
+      commentText,
+      date: new Date().toLocaleString(),
+      likes: 0,
+    })
+    .then(() => {
+      console.log('Comment added successfully');
+      commentForm.reset();
+    })
+    .catch((error) => {
+      console.error('Error adding comment:', error);
+    });
   }
 });
-const form = document.getElementById('commentForm');
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    db.collection('comments').add({
-       name: form.username.value,
-       comment: form.commentText.value
-    });
-    form.username.value = '';
-    form.commentText.value = '';
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-  const categoryButtons = document.querySelectorAll(".category-btn");
-  const posts = document.querySelectorAll(".post");
+// Get comments from Firestore and display them
+db.collection('comments').orderBy('date', 'desc').onSnapshot((querySnapshot) => {
+  commentsContainer.innerHTML = '';
+  querySnapshot.forEach((doc) => {
+    const commentData = doc.data();
+    const commentDiv = document.createElement('div');
+    commentDiv.classList.add('comment');
 
-  categoryButtons.forEach(button => {
-      button.addEventListener("click", function () {
-          const selectedCategory = this.getAttribute("data-category");
+    commentDiv.innerHTML = `
+      <div class="comment-header">
+        <strong>${commentData.username}</strong> 
+        <span class="date">${commentData.date}</span>
+        <button class="delete-btn" aria-label="Delete Comment">
+          🗑️
+        </button>
+        <button class="like-btn" aria-label="Like Comment">
+          <i class="far fa-thumbs-up"></i>
+          <span class="like-count">${commentData.likes}</span>
+        </button>
+      </div>
+      <p>${commentData.commentText}</p>
+    `;
 
-          posts.forEach(post => {
-              const postCategory = post.getAttribute("data-category");
+    commentsContainer.appendChild(commentDiv);
 
-              if (selectedCategory === "all" || postCategory === selectedCategory) {
-                  post.style.display = "block";
-              } else {
-                  post.style.display = "none";
-              }
-          });
+    // Add event listener to the delete button
+    commentDiv.querySelector('.delete-btn').addEventListener('click', () => {
+      db.collection('comments').doc(doc.id).delete()
+      .then(() => {
+        console.log('Comment deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting comment:', error);
       });
-  });
-});
-
-document.querySelectorAll('.like-btn').forEach(button => {
-    button.addEventListener('click', function() {
-      let icon = this.querySelector('i');
-      let count = this.querySelector('.like-count');
-      let currentLikes = parseInt(count.textContent);
-
-      if (icon.classList.contains('far')) {
-        icon.classList.remove('far');
-        icon.classList.add('fas', 'liked'); 
-        count.textContent = currentLikes + 1;
-      } else {
-        icon.classList.remove('fas', 'liked');
-        icon.classList.add('far'); 
-        count.textContent = currentLikes - 1;
-      }
     });
+
+    // Add event listener to the like button
+    commentDiv.querySelector('.like-btn').addEventListener('click', () => {
+      const likeCount = commentData.likes + 1;
+      db.collection('comments').doc(doc.id).update({
+        likes: likeCount,
+      })
+      .then(() => {
+        console.log('Comment liked successfully');
+        commentDiv.querySelector('.like-count').textContent = likeCount;
+      })
+      .catch((error) => {
+        console.error('Error liking comment:', error);
+      });
+    });
+  });
 });
