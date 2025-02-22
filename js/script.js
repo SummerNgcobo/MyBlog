@@ -24,64 +24,57 @@ window.onscroll = () =>{
   searchIcon.classList.remove('fa-times');
   searchForm.classList.remove('active');
 }
+
 document.addEventListener("DOMContentLoaded", function () {
   const commentForm = document.getElementById("commentForm");
   const commentsContainer = document.getElementById("commentsContainer");
 
-  async function loadComments() {
-      const querySnapshot = await getDocs(collection(db, "comments"));
-      commentsContainer.innerHTML = ""; // Clear existing comments
-      querySnapshot.forEach(doc => {
-          const comment = doc.data();
-          addCommentToDOM(comment, doc.id);
-      });
-  }
-
-  commentForm.addEventListener("submit", async function (event) {
+  commentForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
       const username = document.getElementById("username").value;
       const commentText = document.getElementById("commentText").value;
 
       if (username && commentText) {
-          const commentData = {
-              username,
-              commentText,
-              date: new Date().toLocaleString()
-          };
+          const commentData = { username, commentText, date: new Date().toLocaleString() };
 
-          await addDoc(collection(db, "comments"), commentData);
-          loadComments();
+          addCommentToDOM(commentData);
+
           commentForm.reset();
       }
   });
 
-  function addCommentToDOM(comment, id) {
+  function addCommentToDOM(comment) {
       const commentDiv = document.createElement("div");
       commentDiv.classList.add("comment");
-      commentDiv.setAttribute("data-id", id);
 
       commentDiv.innerHTML = `
           <div class="comment-header">
               <strong>${comment.username}</strong> 
               <span class="date">${comment.date}</span>
-              <button class="delete-btn" data-id="${id}" aria-label="Delete Comment">
+              <button class="delete-btn" aria-label="Delete Comment">
                   🗑️
               </button>
           </div>
           <p>${comment.commentText}</p>
       `;
-      commentsContainer.prepend(commentDiv);
+      commentsContainer.prepend(commentDiv); 
 
-      commentDiv.querySelector(".delete-btn").addEventListener("click", async function () {
-          await deleteDoc(doc(db, "comments", id));
-          loadComments();
+      commentDiv.querySelector(".delete-btn").addEventListener("click", function () {
+          commentsContainer.removeChild(commentDiv);
       });
   }
-
-  loadComments(); // Load comments on page load
 });
-
+const form = document.getElementById('commentForm');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    db.collection('comments').add({
+       name: form.username.value,
+       comment: form.commentText.value
+    });
+    form.username.value = '';
+    form.commentText.value = '';
+});
 
 document.addEventListener("DOMContentLoaded", function () {
   const categoryButtons = document.querySelectorAll(".category-btn");
@@ -105,39 +98,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.querySelectorAll('.like-btn').forEach(button => {
-  button.addEventListener('click', async function() {
+    button.addEventListener('click', function() {
       let icon = this.querySelector('i');
       let count = this.querySelector('.like-count');
-      let postId = this.closest('.post').getAttribute('data-category');
-
-      const postRef = doc(db, "likes", postId);
+      let currentLikes = parseInt(count.textContent);
 
       if (icon.classList.contains('far')) {
-          icon.classList.remove('far');
-          icon.classList.add('fas', 'liked');
-          count.textContent = parseInt(count.textContent) + 1;
-
-          await updateDoc(postRef, { count: increment(1) }).catch(async () => {
-              await setDoc(postRef, { count: 1 });
-          });
+        icon.classList.remove('far');
+        icon.classList.add('fas', 'liked'); 
+        count.textContent = currentLikes + 1;
       } else {
-          icon.classList.remove('fas', 'liked');
-          icon.classList.add('far');
-          count.textContent = parseInt(count.textContent) - 1;
-
-          await updateDoc(postRef, { count: increment(-1) });
+        icon.classList.remove('fas', 'liked');
+        icon.classList.add('far'); 
+        count.textContent = currentLikes - 1;
       }
-  });
+    });
 });
-
-// Load Likes from Firestore
-async function loadLikes() {
-  const querySnapshot = await getDocs(collection(db, "likes"));
-  querySnapshot.forEach(doc => {
-      const postId = doc.id;
-      const count = doc.data().count;
-      document.querySelector(`.post[data-category="${postId}"] .like-count`).textContent = count;
-  });
-}
-
-loadLikes();

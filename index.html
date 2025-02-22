@@ -5,12 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summer's Corner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- custom css file link  -->
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D29BYWM592"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D29BYWM592');
+</script>
 
 </head>
 <body>
@@ -62,7 +74,7 @@
 
     <div class="posts-container">
 
-        <div class="post" data-category="food">
+        <div class="post">
             <img src="images/blog-1.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -98,21 +110,14 @@
                 
                 Bon appétit! </p>
             <!-- <p class="text"></p> -->
-             <!-- Like button -->
              <button class="like-btn">
-                <i class="far fa-heart"></i> <span class="like-count">0</span>
-            </button>
-
-    
-
+        <i class="far fa-heart"></i> <span class="like-count">0</span>
+    </button>
             <div class="links">
                 <a href="#" class="user">
                     <i class="far fa-user"></i>
                     <span>by summer</span>
                 </a>
-
-               
- 
                 <div class="comment-section">
                     <h3>Leave a Comment</h3>
                     <form id="commentForm">
@@ -124,14 +129,14 @@
                         <!-- Comments will appear here -->
                     </div>
                 </div>
-                 <!-- <a href="#" class="icon">
+                <!-- <a href="#" class="icon">
                     <i class="far fa-share-square"></i>
-                    <!-- <span></span> -->
+                    <span>(29)</span>
                 </a> -->
             </div>
         </div>
 
-        <div class="post" data-category="public">
+        <div class="post">
             <img src="images/blog-2.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -166,19 +171,14 @@
                 
                 As I navigate this city, I carry with me a heightened awareness of these disparities and a commitment to advocate for a more equitable Johannesburg.</p>
             <!-- <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, reiciendis fugiat quas nemo quia omnis repellat obcaecati quaerat voluptates fuga error dicta cupiditate pariatur soluta dolorum quis eum quibusdam quam?</p> -->
-               <!-- Like button -->
-               <button class="like-btn">
-                <i class="far fa-heart"></i> <span class="like-count">0</span>
-            </button>
-
+            <button class="like-btn">
+        <i class="far fa-heart"></i> <span class="like-count">0</span>
+    </button>
             <div class="links">
                 <a href="#" class="user">
                     <i class="far fa-user"></i>
                     <span>by summer</span>
                 </a>
-
-                
-
                 <div class="comment-section">
                     <h3>Leave a Comment</h3>
                     <form id="commentForm">
@@ -197,7 +197,7 @@
             </div>
         </div>
 
-        <div class="post" data-category="20s">
+        <div class="post">
             <img src="images/blog-3.jpg" alt="" class="image">
             <div class="date">
                 <i class="far fa-clock"></i>
@@ -233,11 +233,9 @@
                 And hey, if I ever get the urge to hear the words “I love you” before bed, I’ll just do what I always do—text my best friend.
                 
                 </p>
-
-              <!-- Like button -->
-    <button class="like-btn">
+            <button class="like-btn">
         <i class="far fa-heart"></i> <span class="like-count">0</span>
-    </button>    
+    </button>
           
             <div class="links">
                 <a href="#" class="user">
@@ -285,15 +283,16 @@
         <div class="box">
             <h3 class="title">categories</h3>
             <div class="category">
-                <a href="#" data-category="travel"> travel </a>
-                <a href="#" data-category="photography"> photography  </a>
-                <a href="#" data-category="technology"> technology </a>
-                <a href="#" data-category="study"> study  </a>
-                <a href="#" data-category="science"> science  </a>
-                <a href="#" data-category="music"> music  </a>
-                <a href="#" data-category="public"> public </a>
-                <a href="#" data-category="food"> food  </a>
-                <a href="#" data-category="20s"> 20s </a>
+                <a href="#"> travel <span>42</span></a>
+                <a href="#"> photography <span>75</span> </a>
+                <a href="#"> technology <span>22</span> </a>
+                <a href="#"> fashion <span>17</span> </a>
+                <a href="#"> study <span>48</span> </a>
+                <a href="#"> science <span>39</span> </a>
+                <a href="#"> music <span>59</span> </a>
+                <a href="#"> public <span>12</span> </a>
+                <a href="#"> business <span>32</span> </a>
+                <a href="#"> sports <span>18</span> </a>
             </div>
         </div>
 
@@ -380,8 +379,37 @@
 
 <!-- footer section ends -->
 
-<script type="module">
-    // Import the functions you need from the SDKs you need
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- custom js file link  -->
+<script src="js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+crossorigin="anonymous"></script>
+<script>
+  // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -390,25 +418,18 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAogXmBAn_3TxQNQSx0REVOwx9osQfXdrM",
-  authDomain: "summer-s-blog-368c9.firebaseapp.com",
-  projectId: "summer-s-blog-368c9",
-  storageBucket: "summer-s-blog-368c9.firebasestorage.app",
-  messagingSenderId: "323963058406",
-  appId: "1:323963058406:web:cb1900642861745c24a327",
-  measurementId: "G-3Q594YNMRZ"
+  apiKey: "AIzaSyCs5sxXkB8Ir1FOR3RKPJT3KZrhAbuq6dA",
+  authDomain: "summer-s-corner-df5cc.firebaseapp.com",
+  projectId: "summer-s-corner-df5cc",
+  storageBucket: "summer-s-corner-df5cc.firebasestorage.app",
+  messagingSenderId: "1014561038422",
+  appId: "1:1014561038422:web:780f2f22dddbbf033f1bf7",
+  measurementId: "G-VK6ZGJWKWF"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-</script>
-
-
-
-
-<script src="js/script.js"></script>
-    
+const analytics = getAnalytics(app);  
+</script>   
 </body>
 </html>
