@@ -74,9 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
 const form = document.getElementById('commentForm');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    db.collection('comments').add({
-       name: form.username.value,
-       comment: form.commentText.value
+    db.collection('commentForm').add({
+       username: form.username.value,
+       commentText: form.commentText.value
     });
     form.username.value = '';
     form.commentText.value = '';
